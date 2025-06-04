@@ -9,7 +9,8 @@ services:
       - "8000:8000"
     environment:
       - DATABASE_URL=postgresql://postgres:postgres@db:5432/careernus
-      - ENVIRONMENT=development
+      - DEBUG=True
+      - SECRET_KEY=dev_secret_key_change_in_production
     depends_on:
       - db
     
