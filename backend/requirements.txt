@@ -1,0 +1,15 @@
+# Pour FastAPI
+fastapi==0.95.0
+uvicorn==0.21.1
+pydantic==1.10.7
+python-dotenv==1.0.0
+sqlalchemy==2.0.9
+alembic==1.10.3
+pytest==7.3.1
+httpx==0.24.0
+
+# Pour l'intégration AWS
+boto3==1.26.115
+
+# Pour l'intégration avec les APIs IA
+openai==0.27.4
