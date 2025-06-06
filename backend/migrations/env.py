@@ -7,11 +7,10 @@ from alembic import context
 
 import sys
 import os
-sys.path.append(os.path.join(os.path.dirname(__file__ ), '..'))
+sys.path.append(os.path.dirname(os.path.dirname(__file__)))
 from src.models.base import Base
 from src.models.user import User
 from src.models.resume import Resume
-target_metadata = Base.metadata
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
@@ -26,7 +25,7 @@ if config.config_file_name is not None:
 # for 'autogenerate' support
 # from myapp import mymodel
 # target_metadata = mymodel.Base.metadata
-target_metadata = None
+target_metadata = Base.metadata
 
 # other values from the config, defined by the needs of env.py,
 # can be acquired:

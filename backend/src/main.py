@@ -1,6 +1,9 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
+from .api.endpoints import resume, auth
+from .config import settings
+
 app = FastAPI(
     title="Careernus API",
     description="API pour la plateforme de recrutement Careernus",
@@ -15,6 +18,11 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+# Inclure les routers
+app.include_router(auth.router, prefix="/api/auth", tags=["authentication"])
+app.include_router(resume.router, prefix="/api/resumes", tags=["resumes"])
+
 
 @app.get("/")
 async def root():
