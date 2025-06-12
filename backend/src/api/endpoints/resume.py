@@ -87,7 +87,8 @@ async def upload_resume(
 @router.get("/{resume_id}", response_model=ResumeWithAnalysis)
 def get_resume(
     resume_id: int,
-    db: Session = Depends(get_db)
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user)
 ):
     """
     Récupère un CV avec son analyse.
@@ -95,10 +96,14 @@ def get_resume(
     resume = db.query(Resume).filter(Resume.id == resume_id).first()
     if not resume:
         raise HTTPException(status_code=404, detail="CV non trouvé")
-    
+
+    # Vérifier que l'utilisateur a accès à ce CV
+    if resume.user_id != current_user.id and not current_user.is_superuser:
+        raise HTTPException(status_code=403, detail="Accès interdit")
+
     # Analyser le CV
     analysis = resume_analyzer.analyze_resume(resume.content)
-    
+
     # Créer la réponse
     resume_schema = ResumeSchema.from_orm(resume)
     return ResumeWithAnalysis(
@@ -111,14 +116,23 @@ def list_resumes(
     skip: int = 0,
     limit: int = 100,
     user_id: Optional[int] = None,
-    db: Session = Depends(get_db)
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user)
 ):
     """
     Liste tous les CV, avec filtrage optionnel par utilisateur.
     """
     query = db.query(Resume)
+
+    # Par défaut, limiter aux CV de l'utilisateur courant
+    if not user_id:
+        user_id = current_user.id
+
     if user_id:
+        # Si l'utilisateur demande un autre utilisateur, vérifier les droits
+        if user_id != current_user.id and not current_user.is_superuser:
+            raise HTTPException(status_code=403, detail="Accès interdit")
         query = query.filter(Resume.user_id == user_id)
-    
+
     resumes = query.offset(skip).limit(limit).all()
     return resumes
