@@ -3,6 +3,7 @@ from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from sqlalchemy.orm import Session
 from datetime import timedelta
 from typing import Any, Optional
+from jose import JWTError, jwt
 
 from ...database import get_db
 from ...models.user import User
