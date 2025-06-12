@@ -179,3 +179,6 @@ yarn-error.log
 *.tfstate
 *.tfstate.backup
 *.tfvars
+# Allow frontend library code
+!frontend/src/lib/
+!frontend/src/lib/**
