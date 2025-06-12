@@ -1,7 +1,5 @@
 from typing import Dict, Any, List, Optional
 import re
-import json
-import os
 from ..schemas.resume import ResumeAnalysisResponse
 
 class ResumeAnalyzer:
